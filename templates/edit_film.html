@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование фильма</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>Редактирование фильма</h1>
+
+    <form action="{{ url_for('update_film', id=film.id) }}" method="POST">
+        <input type="text" name="title" value="{{ film.title }}" required>
+        <input type="text" name="director" value="{{ film.director }}" required>
+        <input type="number" name="year" value="{{ film.year }}" required>
+        <button type="submit">Сохранить изменения</button>
+    </form>
+</body>
+</html>
