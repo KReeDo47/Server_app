@@ -23,12 +23,65 @@
         {% for film in films %}
             <li>
                 <strong>{{ film.title }}</strong> ({{ film.year }}) — режиссёр: {{ film.director }}
+                
+                <!-- Ссылка для редактирования фильма -->
                 <a href="{{ url_for('update_film', id=film.id) }}">Редактировать</a>
-                <form action="{{ url_for('delete_film', id=film.id) }}" method="POST" style="display:inline;">
-                    <button type="submit">Удалить</button>
-                </form>
+                
+                <!-- Кнопка для удаления фильма через JavaScript -->
+                <button class="delete-button" data-id="{{ film.id }}">Удалить</button>
             </li>
         {% endfor %}
     </ul>
+
+    <script>
+        // Получаем все кнопки удаления
+        const deleteButtons = document.querySelectorAll('.delete-button');
+
+        // Добавляем обработчик события для каждой кнопки
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const filmId = this.getAttribute('data-id');  // Получаем ID фильма
+
+                // Отправляем DELETE запрос через fetch
+                fetch(`/films/${filmId}`, {
+                    method: 'DELETE',
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Если запрос прошел успешно, перезагружаем страницу
+                        location.reload();
+                    } else {
+                        alert('Ошибка при удалении фильма');
+                    }
+                })
+                .catch(error => {
+                    alert('Ошибка при запросе');
+                });
+            });
+        });
+
+        // Функция для обработки PUT запроса на редактирование фильма
+        function updateFilm(filmId, title, director, year) {
+            fetch(`/films/${filmId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    title: title,
+                    director: director,
+                    year: year
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Фильм обновлён');
+                location.reload(); // Перезагрузить страницу после обновления
+            })
+            .catch(error => {
+                alert('Ошибка при обновлении');
+            });
+        }
+    </script>
 </body>
 </html>

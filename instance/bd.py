@@ -14,6 +14,7 @@ def get_db():
 def init_db():
     """Инициализация базы данных"""
     db = get_db()
-    with current_app.open_resource('C:/Users/dzely/Downloads/theme/instance/schema.sql', mode='r') as f:
+    with current_app.open_resource('instance/schema.sql', mode='r') as f:
+
         db.cursor().executescript(f.read())
     db.commit()
